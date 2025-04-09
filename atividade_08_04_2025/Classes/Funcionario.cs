@@ -4,7 +4,7 @@ public class Funcionario:Pessoa{
     public string Cargo{get;set;}
     public double Salario{get;set;}
 
-    public Funcionario(string nome,int idade,string email,string cargo,double salario):base(nome,idade,email){
+    public Funcionario(string nome,int idade,string email,string endereco,string cargo,double salario):base(nome,idade,email,endereco){
         this.Cargo=cargo;
         this.Salario=salario;
     }

@@ -1,6 +1,6 @@
 namespace Classes;
 
-public class Pessoa
+public class Pessoa:IApresentavel
 {
     public string Nome{get;set;}
     int Idade;

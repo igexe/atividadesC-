@@ -1,0 +1,38 @@
+@{
+    ViewData["Title"] = "Pessoa Cadastro";
+}
+
+<form method="post" asp-controller="Pessoa" asp-action="Salvar">
+    <div>
+        <label>Nome</label>
+        <input type="text" required id="Nome" name="Nome">
+    </div>
+
+    <div>
+        <label>Sobrenome</label>
+        <input type="text" required id="Sobrenome" name="Sobrenome">
+    </div>
+
+    <div>
+        <label>Endereço</label>
+        <input type="text" required id="Endereco" name="Endereco">
+    </div>
+
+    <div>
+        <label>Cidade</label>
+        <input type="text" required id="Cidade" name="Cidade">
+    </div>
+
+    <div>
+        <label>CEP</label>
+        <input type="number" required id="CEP" name="CEP">
+    </div>
+
+    <div>
+        <label>Telefone</label>
+        <input type="text" required id="Telefone" name="Telefone">
+    </div>
+
+    <input type="submit" value="enviar">
+</form>
+    

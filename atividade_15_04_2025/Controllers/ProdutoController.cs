@@ -1,32 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using atividade_15_04_2025.Models.Cadastros;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace atividade_15_04_2025.Controllers
-{
-    [Route("[controller]")]
-    public class ProdutoController : Controller
-    {
-        private readonly ILogger<ProdutoController> _logger;
-
-        public ProdutoController(ILogger<ProdutoController> logger)
-        {
-            _logger = logger;
+namespace atividade_15_04_2025.controllers{
+    public class ProdutoController:Controller{
+        public IActionResult Produto(){
+            return View();
         }
 
-        public IActionResult Index()
-        {
-            return View("Produto");
-        }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View("Error!");
+        [HttpPost]
+        public IActionResult Salvar(ProdutoModel modelo){
+            if(ModelState.IsValid){
+                Console.WriteLine($"Descricao: {modelo.Descricao}");
+                Console.WriteLine($"Preço: {modelo.Preco}");
+                Console.WriteLine($"NCM: {modelo.NCM}");
+                Console.WriteLine($"Quantidade: {modelo.Quantidade}");
+                return View("Produto");
+            }else{
+                ViewBag.Error="Dados Invalidos";
+                return View("Produto",modelo);
+            }
         }
     }
 }

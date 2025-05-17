@@ -1,0 +1,29 @@
+@{
+    ViewData["Title"]="Cadastro Produto";
+}
+
+<form method="post" asp-controller="Produto" asp-action="Salvar">
+    <div>
+        <label>Descricao</label>
+        <input type="text" required id="Descricao" name="Descricao">
+    </div>
+
+    <div>
+        <label>Preço</label>
+        <input type="number" required id="Preco" name="Preco">
+    </div>
+
+    <div>
+        <label>NCM</label>
+        <input type="number" required id="NCM" name="NCM">
+    </div>
+
+    <div>
+        <label>Quantidade</label>
+        <input type="number" required id="Quantidade" name="Quantidade">
+    </div>
+
+    <div>
+        <input type="submit" value="enviar">
+    </div>
+</form>

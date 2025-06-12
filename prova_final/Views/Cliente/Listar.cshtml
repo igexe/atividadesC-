@@ -1,0 +1,30 @@
+@{
+    ViewData["Title"]="Lista de Cliente";
+}
+
+<div>
+    <a href="@Url.Action("Cadastro","Cliente")" class="btn btn-primary">Cadastro</a>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <th scope="col">Codigo Fiscal</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Nome Fantasia</th>
+        <th scope="col">Endereço</th>
+        <th scope="col">Numero</th>
+        <th scope="col">Bairro</th>
+    </thead>
+    <tbody>
+        @foreach(var cliente in Model){
+            <tr>
+                <td scope="row">@cliente.CodigoFiscal</td>
+                <td scope="row">@cliente.Nome</td>
+                <td scope="row">@cliente.NomeFantasia</td>
+                <td scope="row">@cliente.Endereco</td>
+                <td scope="row">@cliente.Numero</td>
+                <td scope="row">@cliente.Bairro</td>
+            </tr>
+        }
+    </tbody>
+</table>

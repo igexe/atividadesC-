@@ -1,0 +1,104 @@
+@model prova_final.Models.UsuarioModel
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+    body {
+        background: linear-gradient(120deg, #2980b9, #6dd5fa);
+        margin: 0;
+        height: 100vh;
+    }
+
+    .login-wrapper {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-container {
+        background-color: white;
+        padding: 2rem 2.5rem;
+        border-radius: 15px;
+        box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.2);
+        width: 100%;
+        max-width: 400px;
+    }
+
+    .login-container h3 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-label {
+        margin-top: 1rem;
+        font-weight: 500;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        padding: 10px;
+    }
+
+    .btn-login {
+        margin-top: 1.5rem;
+        width: 100%;
+        padding: 10px;
+        font-size: 1.1rem;
+        border-radius: 10px;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .register-link {
+        text-align: center;
+        margin-top: 1rem;
+    }
+</style>
+
+<div class="login-wrapper">
+    <div class="login-container">
+        <form asp-action="Login" asp-controller="Usuario" method="post">
+            <h3>Login</h3>
+
+            <label asp-for="Usuario" class="form-label">Usuário</label>
+            @Html.TextBoxFor(model => model.Usuario, new { @class = "form-control", placeholder = "Digite seu usuário" })
+            @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+
+            <label asp-for="Senha" class="form-label">Senha</label>
+            @Html.PasswordFor(model => model.Senha, new { @class = "form-control", placeholder = "Digite sua senha" })
+            @Html.ValidationMessageFor(model => model.Senha, "", new { @class = "text-danger" })
+
+            <button type="submit" class="btn btn-primary btn-login">Acessar</button>
+
+            @if (!string.IsNullOrEmpty(ViewBag.Errors))
+            {
+                <script>
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: '@Html.Raw(ViewBag.Errors)',
+                        timer: 3000,
+                        showConfirmButton: false
+                    });
+                </script>
+            }
+        </form>
+
+        <div class="register-link">
+            <a asp-controller="Usuario" asp-action="Cadastrar">Não tem uma conta? Cadastre-se</a>
+        </div>
+    </div>
+</div>

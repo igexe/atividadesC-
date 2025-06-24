@@ -1,53 +1,123 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
+    @using prova_final.Models
+    @inject IHttpContextAccessor HttpContextAccessor
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - prova_final</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - Prova Final</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/prova_final.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
+
+@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var esconderLayout = currentController == "Usuario" && currentAction == "Login";
+
+    var usuarioLogado = HttpContextAccessor.HttpContext?.Session.GetString("UsuarioLogado");
+    var repo = new Repositorio<UsuarioModel>();
+    var usuario = repo.Listar().FirstOrDefault(u => u.Usuario == usuarioLogado);
+    var idUsuario = usuario?.Id ?? 0;
+}
+
+@if (TempData["Message"] != null)
+{
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Sucesso!',
+            text: '@TempData["Message"]',
+            timer: 3000,
+            showConfirmButton: false
+        }).then(() => {
+            location.reload();
+        });
+    </script>
+}
+
+@if (!esconderLayout)
+{
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">prova_final</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-clipboard-check"></i> Prova Final
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-house"></i> Home
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link" asp-controller="Cliente" asp-action="Listar">
+                                <i class="fa-solid fa-users"></i> Clientes
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Cliente" asp-action="Listar">Clientes</a>
+                            @* <a class="nav-link" asp-controller="Home" asp-action="Privacy">
+                                <i class="fa-solid fa-shield-halved"></i> Privacidade
+                            </a> *@
                         </li>
+
+                      @if (User.Identity?.IsAuthenticated == true)
+{
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-info" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-user"></i> @User.Identity.Name
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li>
+                <a class="dropdown-item" asp-controller="Usuario" asp-action="Editar">
+                    <i class="fa fa-pen"></i> Editar Conta
+                </a>
+
+            </li>
+            <li>
+                <a class="dropdown-item text-danger" asp-controller="Usuario" asp-action="Sair">
+                    <i class="fa fa-sign-out-alt"></i> Sair
+                </a>
+            </li>
+        </ul>
+    </li>
+}
+
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+}
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - prova_final - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+<div class="container mt-4">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+
+@if (!esconderLayout)
+{
+    <footer class="footer mt-auto py-3 bg-light border-top">
+        <div class="container text-center text-muted small">
+            &copy; 2025 - Prova Final - <a asp-controller="Home" asp-action="Privacy">Política de Privacidade</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

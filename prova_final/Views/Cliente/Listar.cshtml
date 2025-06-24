@@ -1,30 +1,71 @@
+@model List<prova_final.Models.ClienteModel>
 @{
-    ViewData["Title"]="Lista de Cliente";
+    ViewData["Title"] = "Lista de Clientes";
 }
 
-<div>
-    <a href="@Url.Action("Cadastro","Cliente")" class="btn btn-primary">Cadastro</a>
-</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-<table class="table table-bordered">
-    <thead>
-        <th scope="col">Codigo Fiscal</th>
-        <th scope="col">Nome</th>
-        <th scope="col">Nome Fantasia</th>
-        <th scope="col">Endereço</th>
-        <th scope="col">Numero</th>
-        <th scope="col">Bairro</th>
-    </thead>
-    <tbody>
-        @foreach(var cliente in Model){
-            <tr>
-                <td scope="row">@cliente.CodigoFiscal</td>
-                <td scope="row">@cliente.Nome</td>
-                <td scope="row">@cliente.NomeFantasia</td>
-                <td scope="row">@cliente.Endereco</td>
-                <td scope="row">@cliente.Numero</td>
-                <td scope="row">@cliente.Bairro</td>
-            </tr>
-        }
-    </tbody>
-</table>
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary"><i class="fa-solid fa-users"></i> Lista de Clientes</h2>
+
+    <div class="mb-3">
+        <a href="@Url.Action("Cadastro", "Cliente")" class="btn btn-success">
+            <i class="fa-solid fa-user-plus"></i> Novo Cliente
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>CPF/CNPJ</th>
+                    <th>Nome</th>
+                    <th>Fantasia</th>
+                    <th>Endereço</th>
+                    <th>Nº</th>
+                    <th>Bairro</th>
+                    <th>Cidade</th>
+                    <th>Estado</th>
+                    <th style="width: 180px;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var cliente in Model)
+                    {
+                        <tr>
+                            <td>@cliente.CodigoFiscal</td>
+                            <td>@cliente.Nome</td>
+                            <td>@cliente.NomeFantasia</td>
+                            <td>@cliente.Endereco</td>
+                            <td>@cliente.Numero</td>
+                            <td>@cliente.Bairro</td>
+                            <td>@cliente.Cidade</td>
+                            <td>@cliente.Estado</td>
+                            <td>
+                                <div class="btn-group" role="group">
+                                    <a href="@Url.Action("Cadastro", "Cliente", new { id = cliente.Id })" class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="fa-solid fa-pen-to-square"></i>
+                                    </a>
+                                    <a href="@Url.Action("Remover", "Cliente", new { id = cliente.Id })" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente excluir este cliente?');" title="Remover">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                    <a href="@Url.Action("Exportar", "Cliente", new { id = cliente.Id })" class="btn btn-sm btn-info" title="Exportar JSON">
+                                        <i class="fa-solid fa-download"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="9" class="text-center">Nenhum cliente cadastrado.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

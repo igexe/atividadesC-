@@ -1,0 +1,83 @@
+@model prova_final.Models.UsuarioModel
+
+@{
+    ViewData["Title"] = "Editar Usuário";
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+<style>
+    body {
+        background:#fff;
+        margin: 0;
+        height: 100vh;
+    }
+
+    .edit-wrapper {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        max-width: 500px;
+        width: 100%;
+        border-radius: 15px;
+        box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-body {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 15px;
+    }
+
+    .form-label {
+        margin-top: 1rem;
+        font-weight: 500;
+    }
+
+    .text-danger {
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+</style>
+
+<div class="edit-wrapper">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Editar Conta</h2>
+
+            <form asp-action="Editar" asp-controller="Usuario" method="post">
+                @Html.HiddenFor(model => model.Id)
+
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Usuario" class="form-label">Usuário</label>
+                    <input asp-for="Usuario" class="form-control form-control-sm" placeholder="Atualize seu nome de usuário" />
+                    @Html.ValidationMessageFor(model => model.Usuario, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group mb-4">
+                    <label asp-for="Senha" class="form-label">Nova Senha</label>
+                    <input asp-for="Senha" type="password" class="form-control form-control-sm" placeholder="Atualize sua senha" />
+                    @Html.ValidationMessageFor(model => model.Senha, "", new { @class = "text-danger" })
+                </div>
+
+                <button type="submit" class="btn btn-success w-100">
+                    <i class="fa fa-save"></i> Salvar Alterações
+                </button>
+            </form>
+
+            <div class="text-center mt-3">
+                <a asp-controller="Home" asp-action="Index" class="text-decoration-none">
+                    <i class="fa fa-arrow-left"></i> Voltar para a Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

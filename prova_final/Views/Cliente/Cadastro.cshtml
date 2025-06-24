@@ -1,45 +1,205 @@
+@model prova_final.Models.ClienteModel
 @{
-    ViewData["Title"]="Cadastro de Cliente";
+    ViewData["Title"] = "Cadastro de Cliente";
 }
 
-<form>
-    <div class="form-group">
-        <label for="CodigoFiscal">CPF/CNPJ</label>
-        <input type="text" class="form-group" id="CodigoFiscal" name="CodigoFiscal" placeholder="CPF/CNPJ">
-    </div>
-    <div class="form-group">
-        <label for="InscricaoEstatudal">Inscrição Estadual</label>
-        <input type="text" class="form-group" id="InscricaoEstatudal" name="InscricaoEstatudal" maxlength="15" placeholder="Inscrição Estadual" onkeypress="return isNumberKey(event)">
-    </div>
-    <div class="form-group">
-        <label for="Nome">Nome</label>
-        <input type="text" class="form-group" id="Nome" name="Nome" placeholder="Nome">
-    </div>
-    <div class="form-group">
-        <label for="NomeFantasia">Nome Fantasia</label>
-        <input type="text" class="form-group" id="NomeFantasia" name="NomeFantasia" placeholder="Nome Fantasia">
-    </div>
-    <div class="form-group">
-        <label for="Endereco">Endereço</label>
-        <input type="text" class="form-group" id="Endereco" name="Endereco" placeholder="Endereço">
-    </div>
-    <div class="form-group">
-        <label for="Numero">Número</label>
-        <input type="number" class="form-group" id="Numero" name="Numero" placeholder="00">
-    </div>
-    <div class="form-group">
-        <label for="Bairro">Bairro</label>
-        <input type="text" class="form-group" id="Bairro" name="Bairro" placeholder="Bairro">
-    </div>
-</form>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<link href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" rel="stylesheet" />
 
-<script type="text/javascript">
-    function isNumberKey(evt){
-        var charCode=(evt.which) ? evt.which : evt.keyCode;
-        
-        if (charCode > 31 && (charCode < 48 || charCode > 57)){
-            return false;
-        }
-        else{return true;}
+<script src="https://unpkg.com/inputmask@5.0.8/dist/inputmask.min.js"></script>
+<script src="https://unpkg.com/inputmask@5.0.8/dist/bindings/inputmask.binding.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary"><i class="fa-solid fa-user-plus"></i> Cadastro de Cliente</h2>
+
+    @if (ViewBag.Erro != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> @ViewBag.Erro
+        </div>
     }
-</script>
+
+    @if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <strong>Erros encontrados:</strong>
+        <ul>
+            @foreach (var erro in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@erro.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+    <div class="card shadow-sm p-4 rounded-3">
+        <form asp-action="Salvar" method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label"><i class="fa-solid fa-file-signature"></i> Tipo de Documento</label>
+                    <select id="tipoDocumento" class="form-select">
+                        <option value="cpf">CPF</option>
+                        <option value="cnpj">CNPJ</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="CodigoFiscal" class="form-label"><i class="fa-solid fa-id-card"></i> CPF/CNPJ</label>
+                    <input asp-for="CodigoFiscal" id="campoCpfCnpj" class="form-control" />
+                    <span asp-validation-for="CodigoFiscal" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="InscricaoEstatudal" class="form-label"><i class="fa-solid fa-barcode"></i> Inscrição Estadual</label>
+                    <input asp-for="InscricaoEstatudal" class="form-control" maxlength="15" onkeypress="return isNumberKey(event)" />
+                    <span asp-validation-for="InscricaoEstatudal" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-4">
+                    <label asp-for="Numero" class="form-label"><i class="fa-solid fa-hashtag"></i> Número</label>
+                    <input asp-for="Numero" class="form-control" />
+                    <span asp-validation-for="Numero" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Nome" class="form-label"><i class="fa-solid fa-user"></i> Nome</label>
+                    <input asp-for="Nome" class="form-control" />
+                    <span asp-validation-for="Nome" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="NomeFantasia" class="form-label"><i class="fa-solid fa-user-tag"></i> Nome Fantasia</label>
+                    <input asp-for="NomeFantasia" class="form-control" />
+                    <span asp-validation-for="NomeFantasia" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Endereco" class="form-label"><i class="fa-solid fa-road"></i> Endereço</label>
+                    <input asp-for="Endereco" class="form-control" />
+                    <span asp-validation-for="Endereco" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Bairro" class="form-label"><i class="fa-solid fa-city"></i> Bairro</label>
+                    <input asp-for="Bairro" class="form-control" />
+                    <span asp-validation-for="Bairro" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label asp-for="Estado" class="form-label"><i class="fa-solid fa-flag"></i> Estado</label>
+                        <select id="estado" name="Estado" class="form-select"></select>
+                        <span asp-validation-for="Estado" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Cidade" class="form-label"><i class="fa-solid fa-location-dot"></i> Cidade</label>
+                        <select id="cidade" name="Cidade" class="form-select"></select>
+                        <span asp-validation-for="Cidade" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+                <div class="col-md-4">
+                    <label class="form-label"><i class="fa-solid fa-calendar-days"></i> Data de Nascimento / Abertura</label>
+                    <input type="text" id="datepicker" name="DataNascimento" class="form-control" value="@Model.DataNascimento.ToString("dd/MM/yyyy")" placeholder="Selecione uma data" />
+                    <span asp-validation-for="DataNascimento" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label"><i class="fa-solid fa-image"></i> Upload de Imagem</label>
+                    <input type="file" name="imagemUpload" class="form-control" accept="image/*" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model.Imagem))
+                {
+                    <div class="col-md-6">
+                        <label class="form-label">Imagem Atual:</label><br />
+                        <img src="@Model.Imagem" alt="Imagem" width="120" class="rounded shadow-sm" />
+                    </div>
+                }
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a class="btn btn-secondary" asp-action="Listar"><i class="fa-solid fa-arrow-left"></i> Voltar</a>
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-save"></i> Salvar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script>
+        const estadosWrapper = @Html.Raw(ViewBag.EstadosJson ?? "{}");
+        const estados = estadosWrapper.estados || [];
+        console.log("Estados carregados:", estados);
+
+        function preencherEstados() {
+            const selectEstado = document.getElementById("estado");
+            estados.forEach(estado => {
+                const option = document.createElement("option");
+                option.value = estado.sigla;
+                option.text = estado.nome;
+                selectEstado.appendChild(option);
+            });
+        }
+
+        function preencherCidades() {
+            const selectEstado = document.getElementById("estado");
+            const selectCidade = document.getElementById("cidade");
+            const estadoSelecionado = estados.find(e => e.sigla === selectEstado.value);
+
+            selectCidade.innerHTML = "";
+            if (estadoSelecionado) {
+                estadoSelecionado.cidades.forEach(cidade => {
+                    const option = document.createElement("option");
+                    option.value = cidade;
+                    option.text = cidade;
+                    selectCidade.appendChild(option);
+                });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            preencherEstados();
+            preencherCidades();
+            document.getElementById("estado").addEventListener("change", preencherCidades);
+
+            flatpickr("#datepicker", {
+                dateFormat: "d/m/Y",
+                altInput: false,
+                defaultDate: document.getElementById("datepicker").value,
+                minDate: "01/01/2000",
+                maxDate: "31/12/2100",
+                locale: "pt"
+            });
+
+            aplicarMascaraDocumento("cpf");
+            document.getElementById("tipoDocumento").addEventListener("change", function () {
+                aplicarMascaraDocumento(this.value);
+            });
+        });
+
+        function aplicarMascaraDocumento(tipo) {
+            var input = document.getElementById("campoCpfCnpj");
+            if (tipo === "cpf") {
+                Inputmask("999.999.999-99").mask(input);
+            } else if (tipo === "cnpj") {
+                Inputmask("99.999.999/9999-99").mask(input);
+            }
+        }
+
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            return !(charCode > 31 && (charCode < 48 || charCode > 57));
+        }
+
+    </script>
+}
